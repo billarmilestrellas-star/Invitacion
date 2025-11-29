@@ -661,10 +661,48 @@ section .section-inner > button.btn {
   
   
   
-  <!-- AUDIO (sin autoplay para que iOS no lo bloquee) -->
-<audio id="musica" preload="auto">
+  
+<!-- AUDIO (sin autoplay para que iOS no lo bloquee) -->
+<audio id="musica" preload="auto" playsinline>
   <source src="https://github.com/billarmilestrellas-star/Invitacion/raw/refs/heads/main/Andr%C3%A9s%20Cepeda%20-%20Por%20el%20Resto%20de%20mi%20Vida%20-%20Audio.mp3" type="audio/mpeg">
 </audio>
+
+  <script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const audio = document.getElementById("musica");
+  const btn = document.getElementById("btnMusica");
+
+  audio.volume = 0.8;
+
+  // Detectar si es Apple
+  const esIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (!esIOS) {
+    try {
+      await audio.play();
+      btn.textContent = "⏸️"; // cambia el botón
+    } catch (e) {
+      console.log("Autoplay bloqueado, intentando desbloquear…");
+    }
+  } else {
+    // iOS siempre bloquea autoplay
+    btn.textContent = "▶️";
+  }
+
+  // BOTÓN MANUAL
+  btn.addEventListener("click", async () => {
+    if (audio.paused) {
+      await audio.play();
+      btn.textContent = "⏸️";
+    } else {
+      audio.pause();
+      btn.textContent = "▶️";
+    }
+  });
+});
+</script>
+
+  
 
 <!-- BOTÓN FLOTANTE -->
 <div id="btnMusica" class="music-btn" title="Reproducir / Pausar música">▶️</div>
@@ -1226,3 +1264,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 </body>
 </html>
+
